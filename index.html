@@ -82,10 +82,10 @@
   ];
 
   const renderUsers = () => {
-    const usersHtml = users.map((user, index) => {
-      return `<li class="comment">
+    const usersHtml = users.map((user, index, number) => {
+      return `<li data-index='${index}' class="comment">
         <div class="comment-header">
-          <div>${user.name}</div>
+          <div >${user.name}</div>
           <div>${user.date}</div>
         </div>
         <div class="comment-body">
@@ -102,28 +102,42 @@
       </li>`
     }).join("");
     list.innerHTML = usersHtml;
-    
+
     const likeButtons = document.querySelectorAll('.like-button');
-      for (const likeButton of likeButtons) {
-      likeButton.addEventListener('click', () => {
-      const num = likeButton.dataset.num;
-      if (users[num].isLiked == true){
-        users[num].likes -= 1;
-        users[num].isLiked = !users[num].isLiked;
-      } else {
-        users[num].likes += 1;
-        users[num].isLiked = !users[num].isLiked;
+    for (const likeButton of likeButtons) {
+      likeButton.addEventListener('click', (e) => {
+        const num = likeButton.dataset.num;
+        e.stopPropagation();
+        if (users[num].isLiked == true) {
+          users[num].likes -= 1;
+          users[num].isLiked = !users[num].isLiked;
+        } else {
+          users[num].likes += 1;
+          users[num].isLiked = !users[num].isLiked;
+        }
+
+        renderUsers();
+      })
+      const backComments = document.querySelectorAll('li');
+      for (const backComment of backComments) {
+        backComment.addEventListener('click', (e) => {
+          const backUser = backComment.dataset.index;
+          e.stopPropagation();
+
+          inputComment.value = users[backUser].name + " " + ">" + users[backUser].comment + "<";
+        })
       }
-      
-      renderUsers();
-    })
-  }};
+      inputName.value = "";
+      inputComment.value = "";
+    }
+  };
+
 
   addButton.addEventListener('click', () => {
     if (inputName.value === "" || inputComment.value === "") {
       alert('Введите коpректное значение');
     } else {
-      users.push({ name: inputName.value, date: (`${curDate.toLocaleDateString('ru-Ru')}`), comment: inputComment.value, likes: 0, isLiked: false });
+      users.push({ name: inputName.value.replaceAll("<", "&lt").replaceAll(">", "&gt"), date: (`${curDate.toLocaleDateString('ru-Ru')} ${curDate.toLocaleTimeString('ru-Ru')}`), comment: inputComment.value, likes: 0, isLiked: false });
 
       renderUsers();
     }
