@@ -63,7 +63,7 @@
   const inputComment = document.getElementById('comment');
   const list = document.getElementById('list')
   let curDate = new Date();
-  let options = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+  let options = { hour: '2-digit', minute: '2-digit' };
   const users = [
     {
       name: 'Глеб Фокин',
@@ -137,7 +137,7 @@
     if (inputName.value === "" || inputComment.value === "") {
       alert('Введите коpректное значение');
     } else {
-      users.push({ name: inputName.value.replaceAll("<", "&lt").replaceAll(">", "&gt"), date: (`${curDate.toLocaleDateString('ru-Ru')} ${curDate.toLocaleTimeString('ru-Ru')}`), comment: inputComment.value, likes: 0, isLiked: false });
+      users.push({ name: inputName.value.replaceAll("<", "&lt").replaceAll(">", "&gt"), date: (`${curDate.toLocaleDateString('ru-Ru')} ${curDate.toLocaleTimeString('ru-Ru',options)}`), comment: inputComment.value.replaceAll("<", "&lt").replaceAll(">", "&gt"), likes: 0, isLiked: false });
 
       renderUsers();
     }
