@@ -1,18 +1,19 @@
-const addButton = document.getElementById('button');
-const inputName = document.getElementById('input');
-const inputComment = document.getElementById('comment');
+const addButton = document.getElementById('button')
+const inputName = document.getElementById('input')
+const inputComment = document.getElementById('comment')
 const list = document.getElementById('list')
 const addForm = document.getElementById('add-form')
-let curDate = new Date();
-let options = { hour: '2-digit', minute: '2-digit' };
+let curDate = new Date()
+let options = { hour: '2-digit', minute: '2-digit' }
 
-let users = [];
+let users = []
 const updateUsers = (newUsers) => {
-  users = newUsers
-};
+    users = newUsers
+}
 const renderUsers = () => {
-  const usersHtml = users.map((user, index) => {
-    return `<li data-index='${index}' class="comment">
+    const usersHtml = users
+        .map((user, index) => {
+            return `<li data-index='${index}' class="comment">
       <div class="comment-header">
         <div >${user.author.name}</div>
         <div>${user.date}</div>
@@ -29,111 +30,117 @@ const renderUsers = () => {
         </div>
       </div>
     </li>`
-  }).join("");
-  list.innerHTML = usersHtml;
-  renderUsers();}
+        })
+        .join('')
+    list.innerHTML = usersHtml
+}
 
-  const likeButtons = document.querySelectorAll('.like-button');
-  for (const likeButton of likeButtons) {
+const likeButtons = document.querySelectorAll('.like-button')
+for (const likeButton of likeButtons) {
     likeButton.addEventListener('click', (e) => {
-      const num = likeButton.dataset.num;
-      e.stopPropagation();
-      if (users[num].isLiked == true) {
-        users[num].likes -= 1;
-        users[num].isLiked = !users[num].isLiked;
-      } else {
-        users[num].likes += 1;
-        users[num].isLiked = !users[num].isLiked;
-      }
-         
+        const num = likeButton.dataset.num
+        e.stopPropagation()
+        if (users[num].isLiked == true) {
+            users[num].likes -= 1
+            users[num].isLiked = !users[num].isLiked
+        } else {
+            users[num].likes += 1
+            users[num].isLiked = !users[num].isLiked
+        }
     })
-    const backComments = document.querySelectorAll('li');
+
+    const backComments = document.querySelectorAll('li')
     for (const backComment of backComments) {
-      backComment.addEventListener('click', (e) => {
-        const backUser = backComment.dataset.index;
-        e.stopPropagation();
+        backComment.addEventListener('click', (e) => {
+            const backUser = backComment.dataset.index
+            e.stopPropagation()
 
-        inputComment.value = users[backUser].author.name + " " + ">" + users[backUser].text + "<";
-      })
+            inputComment.value =
+                users[backUser].author.name +
+                ' ' +
+                '>' +
+                users[backUser].text +
+                '<'
+        })
     }
-    inputName.value = "";
-    inputComment.value = "";
-  }
-;
-
-fetch("https://wedev-api.sky.pro/api/v1/dmitriy-dudko/comments")
-  .then(response => {
-    return response.json()
-  }).then((data) => {
-    updateUsers(data.comments)
-    renderUsers()
-  })
+    inputName.value = ''
+    inputComment.value = ''
+}
+fetch('https://wedev-api.sky.pro/api/v1/dmitriy-dudko/comments')
+    .then((response) => {
+        return response.json()
+    })
+    .then((data) => {
+        updateUsers(data.comments)
+        renderUsers()
+    })
 
 list.disabled = true
 list.textContent = 'Идет загрузка...'
 
-
-
-
 addButton.addEventListener('click', () => {
-  if (inputName.value === "" || inputComment.value === "") {
-    alert('Введите коpректное значение');
-  } else {
-    const addUser =
-    {
-      name: inputName.value.replaceAll("<", "&lt").replaceAll(">", "&gt"),
-      date: (`${curDate.toLocaleDateString('ru-Ru')} ${curDate.toLocaleTimeString('ru-Ru', options)}`),
-      text: inputComment.value.replaceAll("<", "&lt").replaceAll(">", "&gt"),
-      likes: 0,
-      isLiked: false,
-    };
-    addForm.disapled = true
-    addForm.textContent = 'Идет Загрузка'
-
-
-    fetch("https://wedev-api.sky.pro/api/v1/dmitriy-dudko/comments", {
-      method: "POST",
-      body: JSON.stringify(addUser)
-    })
-      .then((response) => {
-        if (response.status === 201) {
-          return response.json()}
-          else {if (response.status === 500) {
-          throw new Error('Сервер сломался, попробуй позже')
-        } if (response.status === 400) {
-          throw new Error('Неверный ввод')
+    if (inputName.value === '' || inputComment.value === '') {
+        alert('Введите коpректное значение')
+    } else {
+        const addUser = {
+            name: inputName.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
+            date: `${curDate.toLocaleDateString('ru-Ru')} ${curDate.toLocaleTimeString('ru-Ru', options)}`,
+            text: inputComment.value
+                .replaceAll('<', '&lt')
+                .replaceAll('>', '&gt'),
+            likes: 0,
+            isLiked: false,
         }
-          throw new Error('Что-то пошло не так')
-      }    })
+        addForm.disapled = true
+        addForm.textContent = 'Идет Загрузка'
 
-      .then(() => {
-        return fetch("https://wedev-api.sky.pro/api/v1/dmitriy-dudko/comments")
-      })
-      .then((response) => {
-        return response.json()
-      })
-      .then((data) => {
-        addForm.disabled = false
-        addForm.innerHTML = `<input type="text" id="input" class="add-form-name" placeholder="Введите ваше имя" />
+        fetch('https://wedev-api.sky.pro/api/v1/dmitriy-dudko/comments', {
+            method: 'POST',
+            body: JSON.stringify(addUser),
+        })
+            .then((response) => {
+                if (response.status === 201) {
+                    return response.json()
+                } else {
+                    if (response.status === 500) {
+                        throw new Error('Сервер сломался, попробуй позже')
+                    }
+                    if (response.status === 400) {
+                        throw new Error('Неверный ввод')
+                    }
+                    throw new Error('Что-то пошло не так')
+                }
+            })
+
+            .then(() => {
+                return fetch(
+                    'https://wedev-api.sky.pro/api/v1/dmitriy-dudko/comments',
+                )
+            })
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                addForm.disabled = false
+                addForm.innerHTML = `<input type="text" id="input" class="add-form-name" placeholder="Введите ваше имя" />
     <textarea id="comment" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий"
       rows="4"></textarea>
     <div class="add-form-row">
       <button id='button' class="add-form-button">Написать</button>`
-        updateUsers(data.comments)
-        renderUsers()
-        inputName.value = "";
-        inputComment.value = "";
-      })
-      .catch((error) => {
-        addForm.innerHTML = `<input type="text" id="input" class="add-form-name" placeholder="Введите ваше имя" />
+                updateUsers(data.comments)
+                renderUsers()
+                inputName.value = ''
+                inputComment.value = ''
+            })
+            .catch((error) => {
+                addForm.innerHTML = `<input type="text" id="input" class="add-form-name" placeholder="Введите ваше имя" />
     <textarea id="comment" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий"
       rows="4"></textarea>
     <div class="add-form-row">
       <button id='button' class="add-form-button">Написать</button>`
-        if (error.message === 'Неверный ввод') {
-          alert ("Слишком мало символов")
-        }
-      })
-
-  }
-});
+                if (error.message === 'Неверный ввод') {
+                    alert('Слишком мало символов')
+                }
+            })
+    }
+})

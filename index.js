@@ -1,18 +1,30 @@
 import { renderUsers, updateUsers } from './render.js'
-import { like, comment } from './buttons.js'
+// import { like, comment } from './buttons.js'
+import { renderLogin } from './renderLogin.js'
+import { addBtn } from './addBtn.js'
+
 
 const addButton = document.getElementById('button')
 const inputName = document.getElementById('input')
+const list = document.getElementById('list')
 const inputComment = document.getElementById('comment')
-const addForm = document.getElementById('add-form')
-let curDate = new Date()
-let options = { hour: '2-digit', minute: '2-digit' }
+export const addForm = document.getElementById('add-form')
+    let curDate = new Date()
+    let options = { hour: '2-digit', minute: '2-digit' }
+export let token = ''
+export const setToken = (newToken) => {
+    token = newToken
+}
+export const setName = (newName) => {
+    name = newName
+}
+renderLogin()
 
 renderUsers()
-like()
-comment()
+// like()
+// comment()
 
-fetch('https://wedev-api.sky.pro/api/v1/dmitriy-dudko/comments')
+fetch('https://wedev-api.sky.pro/api/v2/dmitriy-dudko/comments')
     .then((response) => {
         return response.json()
     })
@@ -24,69 +36,4 @@ fetch('https://wedev-api.sky.pro/api/v1/dmitriy-dudko/comments')
 list.disabled = true
 list.textContent = 'Идет загрузка...'
 
-addButton.addEventListener('click', () => {
-    if (inputName.value === '' || inputComment.value === '') {
-        alert('Введите коpректное значение')
-    } else {
-        const addUser = {
-            name: inputName.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
-            date: `${curDate.toLocaleDateString('ru-Ru')} ${curDate.toLocaleTimeString('ru-Ru', options)}`,
-            text: inputComment.value
-                .replaceAll('<', '&lt')
-                .replaceAll('>', '&gt'),
-            likes: 0,
-            isLiked: false,
-        }
-        addForm.disapled = true
-        addForm.textContent = 'Идет Загрузка'
-
-        fetch('https://wedev-api.sky.pro/api/v1/dmitriy-dudko/comments', {
-            method: 'POST',
-            body: JSON.stringify(addUser),
-        })
-            .then((response) => {
-                if (response.status === 201) {
-                    return response.json()
-                } else {
-                    if (response.status === 500) {
-                        throw new Error('Сервер сломался, попробуй позже')
-                    }
-                    if (response.status === 400) {
-                        throw new Error('Неверный ввод')
-                    }
-                    throw new Error('Что-то пошло не так')
-                }
-            })
-
-            .then(() => {
-                return fetch(
-                    'https://wedev-api.sky.pro/api/v1/dmitriy-dudko/comments',
-                )
-            })
-            .then((response) => {
-                return response.json()
-            })
-            .then((data) => {
-                addForm.disabled = false
-                addForm.innerHTML = `<input type="text" id="input" class="add-form-name" placeholder="Введите ваше имя" />
-    <textarea id="comment" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий"
-      rows="4"></textarea>
-    <div class="add-form-row">
-      <button id='button' class="add-form-button">Написать</button>`
-                updateUsers(data.comments)
-                renderUsers()
-                inputName.value = ''
-                inputComment.value = ''
-            })
-            .catch((error) => {
-                addForm.innerHTML = `<input type="text" id="input" class="add-form-name" placeholder="Введите ваше имя" />
-    <textarea id="comment" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий"
-      rows="4"></textarea>
-    <div class="add-form-row">
-      <button id='button' class="add-form-button">Написать</button>`
-                if (error.message === 'Неверный ввод') {
-                    alert('Слишком мало символов')
-                }
-            })
-    }
-})
+addBtn()

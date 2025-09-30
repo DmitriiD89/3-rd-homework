@@ -1,8 +1,17 @@
+// const list = document.getElementById('list')
+import { token } from './index.js'
+import { addBtn } from './addBtn.js'
+
+import { renderLogin } from './renderLogin.js'
+
+// import { loginHtml } from './renderLogin.js'
 export let users = []
 export const updateUsers = (newUsers) => {
     users = newUsers
 }
+
 export const renderUsers = () => {
+    const container = document.querySelector('.container')
     const usersHtml = users
         .map((user, index) => {
             return `<li data-index='${index}' class="comment">
@@ -24,5 +33,27 @@ export const renderUsers = () => {
     </li>`
         })
         .join('')
-    list.innerHTML = usersHtml
+    const addCommentHtml = ` <ul id="list" class="comments">
+    </ul>
+    <div class="add-form"  id="add-form">
+      <input type="text" id="input" class="add-form-name" placeholder="Введите ваше имя" />
+      <textarea id="comment" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий"
+        rows="4"></textarea>
+      <div class="add-form-row">
+        <button id='button' class="add-form-button">Написать</button>
+      </div>
+    </div>`
+    const linkLogin = `<p>Для отправки комментария <span class="link-login">войдите</span>`
+
+    const baseHtml = `<ul class='comments'>${usersHtml}</ul>
+    ${token ? addCommentHtml : linkLogin}`
+    container.innerHTML = baseHtml
+    if (token) {
+        return addBtn
+    } else {
+        document.querySelector('.link-login').addEventListener('click', () => {
+            renderLogin()
+        })
+    }
+    // list.innerHTML = usersHtml
 }
