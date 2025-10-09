@@ -48,8 +48,9 @@ export const renderComments = () => {
     const linkToLoginText = `<p>чтобы отправить комментарий, <span class="link-login">войдите</span></p>`
 
     const baseHtml = `<ul class="comments">${commentsHtml}</ul>
-    
     ${token ? addComentsHtml : linkToLoginText}`
+
+    container.innerHTML = baseHtml
     if (token) {
         initLikeListeners(renderComments)
         initReplyListeners()
@@ -62,6 +63,4 @@ export const renderComments = () => {
             })
         }
     }
-
-    container.innerHTML = baseHtml
 }
