@@ -3,13 +3,13 @@ import { postComment } from './api.js'
 import { renderComments } from './renderComments.js'
 
 export const initReplyListeners = () => {
-    const text = document.getElementById('text-input')
+    const text = document.getElementById('comment')
     const commentsElements = document.querySelectorAll('.comment')
 
     for (const commentElement of commentsElements) {
         commentElement.addEventListener('click', () => {
             const currentComment = comments[commentElement.dataset.index]
-            text.value = `${currentComment.name}: ${currentComment.text}`
+            text.value = `${currentComment.name}:${currentComment.text}`
         })
     }
 }
@@ -33,7 +33,7 @@ export const initLikeListeners = () => {
 }
 export const initAddCommentListener = (renderComments) => {
     const name = document.getElementById('name-input')
-    const text = document.getElementById('text-input')
+    const text = document.getElementById('comment')
     const addButton = document.querySelector('.add-form-button')
 
     addButton.addEventListener('click', () => {
@@ -41,24 +41,24 @@ export const initAddCommentListener = (renderComments) => {
             console.error('Заполните форму')
             return
         }
-        document.querySelector('.form-loading').style.display = 'block'
-        document.querySelector('.add-form').style.display = 'none'
+        // document.querySelector('.form-loading').style.display = 'block'
+        // document.querySelector('.add-form').style.display = 'none'
 
         const sanitizeHTML = (value) => {
             return value.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
         }
         postComment(sanitizeHTML(text.value), sanitizeHTML(name.value))
             .then((data) => {
-                document.querySelector('.form-loading').style.display = 'none'
-                document.querySelector('.add-form').style.display = 'flex'
+                // document.querySelector('.form-loading').style.display = 'none'
+                // document.querySelector('.add-form').style.display = 'flex'
                 updateComments(data)
                 renderComments()
                 name.value = ''
                 text.value = ''
             })
             .catch((error) => {
-                document.querySelector('.form-loading').style.display = 'none'
-                document.querySelector('.add-form').style.display = 'flex'
+                // document.querySelector('.form-loading').style.display = 'none'
+                // document.querySelector('.add-form').style.display = 'flex'
 
                 if (error.message === 'Ошибка сервера') {
                     alert('Ошибка сервера')

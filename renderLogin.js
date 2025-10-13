@@ -6,8 +6,8 @@ export const renderLogin = () => {
     const container = document.querySelector('.container')
     const loginHtml = `
     <div class="add-form">
-      <input style="margin-bottom: 10px" type="text" id="login" class="add-form-name" placeholder="Введите логин" />
-       <input type="password" id="password" class="add-form-name" placeholder="Введите пароль" />
+      <input style="margin-bottom: 10px" type="text" id="login" class="add-reg" placeholder="Введите логин" />
+       <input type="password" id="password" class="add-reg" placeholder="Введите пароль" />
         <button id='btn-login' class="add-form-button login">Войдите</button>
         <button id='btn-reg' class="add-form-button">Зарегистрироваться</button>
     </div>`

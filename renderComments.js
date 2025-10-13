@@ -31,19 +31,25 @@ export const renderComments = () => {
         })
         .join('')
 
-    const addComentsHtml = ` <ul id="list" class="comments">
-    </ul>
-    <div class="add-form"  id="add-form">
-      <input type="text" id="input" class="add-form-name" placeholder="Введите ваше имя"readonly value="${name}" id="name-input"/>
-      <textarea id="comment" type="textarea" class="add-form-text" placeholder="Введите ваш коментарий"
-        rows="4"></textarea>
-      <div class="add-form-row">
-        <button id='button' class="add-form-button">Написать</button>
-      </div>
+    const addComentsHtml = `<div class="add-form" id="add-form">
+    <input type="text" 
+        class="add-form-name" 
+        placeholder="Введите ваше имя" 
+        readonly 
+        value="${name}" 
+        id="name-input"
+    />
+    <textarea 
+        class="add-form-text" 
+        placeholder="Введите ваш комментарий"
+        rows="4"
+        id="comment"
+    ></textarea>
+    <div class="add-form-row">
+        <button id="button" class="add-form-button">Написать</button>
     </div>
-   <div class="form-loading" style="display: none; margin-top: 20px">
-    Комментарий добавляется...
-    </div>`
+  </div>
+  `
 
     const linkToLoginText = `<p>чтобы отправить комментарий, <span class="link-login">войдите</span></p>`
 

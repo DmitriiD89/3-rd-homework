@@ -1,13 +1,12 @@
 const host = 'https://wedev-api.sky.pro/api/v2/dmitriy-dudko'
 const apiHost = 'https://wedev-api.sky.pro/api/user'
-export let token = ''
 
+export let token = ''
 export const setToken = (newToken) => {
     token = newToken
 }
 
 export let name = ''
-
 export const setName = (newName) => {
     name = newName
 }
